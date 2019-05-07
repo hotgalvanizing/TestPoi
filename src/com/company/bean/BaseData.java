@@ -10,13 +10,13 @@ public class BaseData {
     /**
      * 保存一行数据
      */
-    List<String> otherNameList;
+    List<String> oneRowList;
 
-    public List<String> getOtherNameList() {
-        return otherNameList;
+    public List<String> getOneRowList() {
+        return oneRowList;
     }
 
-    public void setOtherNameList(List<String> otherNameList) {
-        this.otherNameList = otherNameList;
+    public void setOneRowList(List<String> oneRowList) {
+        this.oneRowList = oneRowList;
     }
 }

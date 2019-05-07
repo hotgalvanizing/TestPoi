@@ -7,6 +7,7 @@ import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.poifs.filesystem.POIFSFileSystem;
 import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.CellType;
 import org.apache.poi.ss.usermodel.Row;
 
 import java.io.File;
@@ -14,7 +15,9 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 /**
  * 读数据类：读数据表
@@ -24,12 +27,44 @@ public class DataReader {
     /**
      * 保存表头信息
      */
-    public DataTitle dataTitle;
+    private DataTitle dataTitle;
     /**
      * 保存一行数据
      */
-    public List<BaseData> dataOneList;
+    private List<BaseData> dataList = new ArrayList<>();
 
+    /**
+     * 测试数据类型
+     */
+    private Set<String> testSet;
+
+    public Set<String> getTestSet() {
+        return testSet;
+    }
+
+    public void setTestSet(Set<String> testSet) {
+        this.testSet = testSet;
+    }
+
+    public DataTitle getDataTitle() {
+        return dataTitle;
+    }
+
+    public void setDataTitle(DataTitle dataTitle) {
+        this.dataTitle = dataTitle;
+    }
+
+    public List<BaseData> getDataList() {
+        return dataList;
+    }
+
+    public void setDataList(List<BaseData> dataList) {
+        this.dataList = dataList;
+    }
+
+    /**
+     * 读取文件的地址
+     */
     String url;
 
     public DataReader(String url) {
@@ -75,12 +110,33 @@ public class DataReader {
                         DataOne dataOne = new DataOne();
 
                         List<String> dataList = new ArrayList<>();
+
+                        testSet = new HashSet<>();
                         //遍历单元格对象
                         for (Cell cell : row) {
-                            dataList.add(cell.getStringCellValue());
+                            CellType cellType = cell.getCellType();
+
+                            if (cellType == CellType._NONE){
+                                //TODO
+                            }else if (cellType == CellType.NUMERIC){
+                                dataList.add(Double.toString(cell.getNumericCellValue()));
+                            }else if (cellType == CellType.STRING){
+                                dataList.add(cell.getStringCellValue());
+                            }else if (cellType == CellType.FORMULA){
+                                //TODO
+                            }else if (cellType == CellType.BLANK){
+                                //TODO
+                            }else if (cellType == CellType.BOOLEAN){
+                                //TODO
+                            }else if (cellType == CellType.ERROR){
+                                //TODO
+                            }else {
+                                //TODO
+                            }
                         }
-                        dataOne.setOtherNameList(dataList);
-                        dataOneList.add(dataOne);
+                        dataOne.setOneRowList(dataList);
+                        this.dataList.add(dataOne);
+
                     }
                 }
             } else {
@@ -90,8 +146,21 @@ public class DataReader {
             e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
-        }finally {
-            //TODO 关闭流
+        } finally {
+            if (fs != null) {
+                try {
+                    fs.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+            if (in != null) {
+                try {
+                    in.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
         }
     }
 }

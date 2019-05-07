@@ -1,6 +1,9 @@
 package com.company;
 
+import com.company.bean.BaseData;
 import com.company.model.DataReader;
+
+import java.util.List;
 
 /**
  * 1、初始化配置
@@ -32,7 +35,18 @@ public class Main {
      */
     public static void main(String[] args) {
 
-        DataReader dataOneReader = new DataReader("E:\\JavaProject\\铁塔动环工单输入表.xls");
+        DataReader dataOneReader = new DataReader("D:\\javalearn\\project\\exwork\\workfloder\\铁塔动环工单输入表.xls");
+        dataOneReader.readData();
+        List<BaseData> list = dataOneReader.getDataList();
+        BaseData ba = list.get(0);
+        for (String s:ba.getOneRowList()) {
+            if ("".equals(s)){
+                System.out.println("我说空字符串");
+            }
+        }
+
+
+
 
 
     }
