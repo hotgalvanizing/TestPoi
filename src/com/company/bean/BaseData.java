@@ -3,20 +3,17 @@ package com.company.bean;
 import java.util.List;
 
 /**
- * 数据表基础类
+ * 电子表格中的数据部分
  */
 public class BaseData {
 
-    /**
-     * 保存一行数据
-     */
-    List<String> oneRowList;
+    List<RowData> oneRowList;
 
-    public List<String> getOneRowList() {
+    public List<RowData> getOneRowList() {
         return oneRowList;
     }
 
-    public void setOneRowList(List<String> oneRowList) {
+    public void setOneRowList(List<RowData> oneRowList) {
         this.oneRowList = oneRowList;
     }
 }

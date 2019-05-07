@@ -1,8 +1,12 @@
 package com.company;
 
 import com.company.bean.BaseData;
-import com.company.model.DataReader;
+import com.company.bean.BaseExcel;
+import com.company.bean.BaseSheet;
+import com.company.bean.DataTitle;
+import com.company.model.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -16,38 +20,42 @@ import java.util.List;
 public class Main {
 
     /**
-     * case 1:
-     * 如果判断为铁塔动环工单：执行下列操作
-     *
-     * 1、如果原始表中对 “接单时间”为空
-     * 2、计算当前时间减”派单时间”的差；
-     * 3、加可设置筛选条件（分钟），得出结果表-接单催办表；
-     *
-     * 5、如果接单时间不为空；
-     * 6、计算“接单时间”减“派单时间”与的差；
-     * 7、加可设置筛选条件（分钟），得出结果表-回单催办表
-     */
-
-    /**
      * 入口函数
      *
      * @param args
      */
     public static void main(String[] args) {
 
+        System.out.println("自动催办工具运行");
+
+        System.out.println("读取铁塔动环工单");
         DataReader dataOneReader = new DataReader("D:\\javalearn\\project\\exwork\\workfloder\\铁塔动环工单输入表.xls");
         dataOneReader.readData();
-        List<BaseData> list = dataOneReader.getDataList();
-        BaseData ba = list.get(0);
-        for (String s:ba.getOneRowList()) {
-            if ("".equals(s)){
-                System.out.println("我说空字符串");
-            }
-        }
 
+        System.out.println("读取配置文件");
+        ConfigReader configReader = new ConfigReader("D:\\javalearn\\project\\exwork\\workfloder\\配置文件.xls");
 
+        System.out.println("处理数据");
+        HandleData handleOneData = new HandleOneData(dataOneReader);
+        System.out.println("处理结束");
 
+        System.out.println("输出接单催办表、回单催办表");
+        BaseExcel baseExcel = new BaseExcel();
 
+        BaseSheet baseSheet = new BaseSheet();
+        baseSheet.setBaseData(dataOneReader.getDataList());
+        baseSheet.setDataTitle(dataOneReader.getDataTitle());
+        baseSheet.setSheetName("Test");
+
+        List<BaseSheet> baseSheets = new ArrayList<>();
+        baseSheets.add(baseSheet);
+
+        baseExcel.setSheetList(baseSheets);
+
+        OutFile outFile = new OutFile(baseExcel, "D:\\javalearn\\project\\exwork\\workfloder\\自动催办.xls");
+        outFile.writeFile();
+        System.out.println("归档文件");
+        PlaceFile placeFile = new PlaceFile("", "");
 
     }
 }

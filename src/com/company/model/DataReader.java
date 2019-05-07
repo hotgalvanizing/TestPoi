@@ -1,8 +1,8 @@
 package com.company.model;
 
 import com.company.bean.BaseData;
-import com.company.bean.DataOne;
 import com.company.bean.DataTitle;
+import com.company.bean.RowData;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.poifs.filesystem.POIFSFileSystem;
@@ -15,7 +15,6 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -29,9 +28,9 @@ public class DataReader {
      */
     private DataTitle dataTitle;
     /**
-     * 保存一行数据
+     * 保存所有数据
      */
-    private List<BaseData> dataList = new ArrayList<>();
+    private BaseData allBaseData;
 
     /**
      * 测试数据类型
@@ -42,24 +41,12 @@ public class DataReader {
         return testSet;
     }
 
-    public void setTestSet(Set<String> testSet) {
-        this.testSet = testSet;
-    }
-
     public DataTitle getDataTitle() {
         return dataTitle;
     }
 
-    public void setDataTitle(DataTitle dataTitle) {
-        this.dataTitle = dataTitle;
-    }
-
-    public List<BaseData> getDataList() {
-        return dataList;
-    }
-
-    public void setDataList(List<BaseData> dataList) {
-        this.dataList = dataList;
+    public BaseData getDataList() {
+        return allBaseData;
     }
 
     /**
@@ -86,19 +73,17 @@ public class DataReader {
             fs = new POIFSFileSystem(in);
 
             if (file.isFile() && file.exists()) {
-
                 //得到Excel工作簿对象
                 //TODO HSSFWorkbook与XSSFWorkbook的区别
                 HSSFWorkbook wk = new HSSFWorkbook(fs);
-
                 //得到Excel工作簿的第一页，即excel工作表对象
                 HSSFSheet sheet = wk.getSheetAt(0);
-
+                List<RowData> dataList = new ArrayList<>();
                 //遍历行对象
                 //TODO 遍历过程需要判断电子表格是否有空行，需要判断表头在哪一行
                 for (Row row : sheet) {
+                    //第1行是表头
                     if (row.getRowNum() == 0) {
-                        //表头行
                         dataTitle = new DataTitle();
                         List<String> titleList = new ArrayList<>();
                         for (Cell cell : row) {
@@ -106,41 +91,44 @@ public class DataReader {
                         }
                         dataTitle.setTitleNameList(titleList);
                     } else {
-                        //数据行
-                        DataOne dataOne = new DataOne();
-
-                        List<String> dataList = new ArrayList<>();
-
-                        testSet = new HashSet<>();
-                        //遍历单元格对象
+                        RowData rowData = new RowData();
+                        List<String> rowDataList = new ArrayList<>();
                         for (Cell cell : row) {
                             CellType cellType = cell.getCellType();
-
-                            if (cellType == CellType._NONE){
-                                //TODO
-                            }else if (cellType == CellType.NUMERIC){
-                                dataList.add(Double.toString(cell.getNumericCellValue()));
-                            }else if (cellType == CellType.STRING){
-                                dataList.add(cell.getStringCellValue());
-                            }else if (cellType == CellType.FORMULA){
-                                //TODO
-                            }else if (cellType == CellType.BLANK){
-                                //TODO
-                            }else if (cellType == CellType.BOOLEAN){
-                                //TODO
-                            }else if (cellType == CellType.ERROR){
-                                //TODO
-                            }else {
-                                //TODO
+                            switch (cellType) {
+                                case _NONE:
+                                    //TODO
+                                    break;
+                                case BLANK:
+                                    //TODO
+                                    break;
+                                case ERROR:
+                                    //TODO
+                                    break;
+                                case STRING:
+                                    rowDataList.add(cell.getStringCellValue());
+                                    break;
+                                case BOOLEAN:
+                                    //TODO
+                                    break;
+                                case FORMULA:
+                                    //TODO
+                                    break;
+                                case NUMERIC:
+                                    rowDataList.add(Double.toString(cell.getNumericCellValue()));
+                                    break;
+                                default:
                             }
                         }
-                        dataOne.setOneRowList(dataList);
-                        this.dataList.add(dataOne);
-
+                        rowData.setOneRowList(rowDataList);
+                        dataList.add(rowData);
                     }
                 }
+                //遍历表头和数据后
+                allBaseData = new BaseData();
+                allBaseData.setOneRowList(dataList);
             } else {
-                //TODO 写入日志
+                System.out.println("请确认是否正确放入文件");
             }
         } catch (FileNotFoundException e) {
             e.printStackTrace();
