@@ -1,6 +1,8 @@
-package com.company.model;
+package com.company.model.handledata.three;
 
 import com.company.bean.RowData;
+import com.company.model.DataReader;
+import com.company.model.handledata.HandleData;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -8,8 +10,10 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-public class HandleTwoData extends HandleData{
-    public HandleTwoData(DataReader dataOneReader) {
+public class HandleThreeAData extends HandleData {
+
+
+    public HandleThreeAData(DataReader dataOneReader) {
         super(dataOneReader);
     }
 
@@ -20,15 +24,20 @@ public class HandleTwoData extends HandleData{
     }
 
     /**
-     * 5、如果接单时间不为空；
-     * 6、计算“接单时间”减“派单时间”与的差；
-     * 7、加可设置筛选条件（分钟），得出结果表-回单催办表
-     * 4、生成报表
+     * 1、如果“状态”为“新建”，生成电信接单催办表；
+     * 2、在电信接单催办表中，根据据“告警发生地市”，
+     * 通过微信发送给不同处理人（微信发送模块可以设置不同地市接收人或指定群内根据所属地市判断后@不同人员微信）
      *
-     * 接单时间--字段为空，第5个字段，index4
-     * 派单时间--字段不为空，第4个字段，index3
+     * 3、如果“状态”为“处理中”且“系统记录故障恢复时间”有值，生成电信回单催办表；
+     * 4、在电信回单催办表中，根据“告警发生地市”判断，通过微信发送给不同处理人，
+     * 微信发送模块可以设置不同地市接收人或指定群内根据所属地市判断后@不同人员微信）；
+     *
+     * 5、如果如果“状态”为“处理中”且“系统记录故障恢复时间”为空
+     * 6、计算当前时间减“创建时间”的差；
+     * 7、加可设置筛选条件（分钟），得出结果表-电信处理催办表；
+     * 8、通过电信催办表中的“告警发生地市”判断，然后通过微信发送给不同处理人
+     * （微信发送模块可以设置不同地市接收人或指定群内根据所属地市判断后@不同人员微信）
      */
-
     @Override
     public void handleBaseData() {
         List<RowData> handleData = new ArrayList<>();

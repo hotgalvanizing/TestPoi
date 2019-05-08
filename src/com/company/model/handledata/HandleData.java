@@ -1,7 +1,8 @@
-package com.company.model;
+package com.company.model.handledata;
 
 import com.company.bean.BaseData;
 import com.company.bean.DataTitle;
+import com.company.model.DataReader;
 
 /**
  * 数据处理超类类

@@ -1,6 +1,8 @@
-package com.company.model;
+package com.company.model.handledata.one;
 
 import com.company.bean.RowData;
+import com.company.model.DataReader;
+import com.company.model.handledata.HandleData;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -8,9 +10,9 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-public class HandleOneData extends HandleData {
+public class HandleOneAData extends HandleData {
 
-    public HandleOneData(DataReader dataOneReader) {
+    public HandleOneAData(DataReader dataOneReader) {
         super(dataOneReader);
     }
 
