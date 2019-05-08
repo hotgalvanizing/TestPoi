@@ -153,7 +153,11 @@ public class Main {
         outFile.writeFile();
 
         System.out.println("归档文件");
-        PlaceFile placeFile = new PlaceFile("", "");
-
+        PlaceFile placeOneFile = new PlaceFile("E:\\JavaProject\\铁塔动环工单输入表.xls", "E:\\JavaProject\\归档数据","铁塔动环工单输入表电信输入表.xls");
+        PlaceFile placeTwoFile = new PlaceFile("E:\\JavaProject\\联通输入表.xls", "E:\\JavaProject\\归档数据","联通输入表.xls");
+        PlaceFile placeThreeFile = new PlaceFile("E:\\JavaProject\\电信输入表.xls", "E:\\JavaProject\\归档数据","电信输入表.xls");
+        placeOneFile.copyfile();
+        placeTwoFile.copyfile();
+        placeThreeFile.copyfile();
     }
 }
