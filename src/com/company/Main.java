@@ -37,20 +37,31 @@ public class Main {
         ConfigReader configReader = new ConfigReader("D:\\javalearn\\project\\exwork\\workfloder\\配置文件.xls");
 
         System.out.println("处理数据");
+        //报表1
         HandleData handleOneData = new HandleOneData(dataOneReader);
         handleOneData.handleData();
+
+        //报表2
+        HandleData handleTwoData = new HandleTwoData(dataOneReader);
+        handleTwoData.handleData();
         System.out.println("处理结束");
 
         System.out.println("输出接单催办表、回单催办表");
         BaseExcel baseExcel = new BaseExcel();
 
-        BaseSheet baseSheet = new BaseSheet();
-        baseSheet.setBaseData(handleOneData.getAllBaseData());
-        baseSheet.setDataTitle(handleOneData.getDataTitle());
-        baseSheet.setSheetName("Test");
+        BaseSheet baseSheet1 = new BaseSheet();
+        baseSheet1.setBaseData(handleOneData.getAllBaseData());
+        baseSheet1.setDataTitle(handleOneData.getDataTitle());
+        baseSheet1.setSheetName("Test1");
+
+        BaseSheet baseSheet2 = new BaseSheet();
+        baseSheet2.setBaseData(handleTwoData.getAllBaseData());
+        baseSheet2.setDataTitle(handleTwoData.getDataTitle());
+        baseSheet2.setSheetName("Test2");
 
         List<BaseSheet> baseSheets = new ArrayList<>();
-        baseSheets.add(baseSheet);
+        baseSheets.add(baseSheet1);
+        baseSheets.add(baseSheet2);
 
         baseExcel.setSheetList(baseSheets);
 

@@ -42,11 +42,12 @@ public class OutFile {
 
         try {
             out = new FileOutputStream(file);
+            //创建excel工作簿对象
+            HSSFWorkbook wb = new HSSFWorkbook();
 
             //循环创建需要的所有sheet
             for (BaseSheet baseSheet : baseExcel.getSheetList()) {
-                //创建excel工作簿对象
-                HSSFWorkbook wb = new HSSFWorkbook();
+
                 //创建excel页
                 HSSFSheet sheet = wb.createSheet(baseSheet.getSheetName());
 
@@ -64,8 +65,8 @@ public class OutFile {
                         cell.setCellValue(baseSheet.getBaseData().getAllRowList().get(i).getOneRowList().get(j));
                     }
                 }
-                wb.write(out);
             }
+            wb.write(out);
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         } catch (IOException e) {

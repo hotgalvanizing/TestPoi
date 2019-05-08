@@ -1,6 +1,5 @@
 package com.company.model;
 
-import com.company.bean.DataTitle;
 import com.company.bean.RowData;
 
 import java.text.ParseException;
@@ -25,11 +24,10 @@ public class HandleOneData extends HandleData {
      * 1、如果原始表中对 “接单时间”为空
      * 2、计算当前时间减”派单时间”的差；
      * 3、加可设置筛选条件（分钟），得出结果表-接单催办表；
+     * 4、生成报表
      *
-     * 4、在接单催办表中，根据“所属地市”判断，通过微信发送给不同处理人，
-     * 微信发送模块可以设置不同地市接收人或指定群内根据所属地市判断后@不同人员微信）
-     *
-     * 接单时间--字段为空，第5个字段
+     * 接单时间--字段为空，第5个字段，index4
+     * 派单时间--字段不为空，第4个字段，index3
      */
     @Override
     public void handleBaseData() {
@@ -37,16 +35,18 @@ public class HandleOneData extends HandleData {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         long currentTime = System.currentTimeMillis();
         //筛选接单时间为空的数据,根据配置文件筛选,字符串转时间类型,时间类型计算时间差
-        for (RowData rowData :dataReader.getDataList().getAllRowList()) {
-            if (!("".equals(rowData.getOneRowList().get(4)))){
+        for (RowData rowData : dataReader.getDataList().getAllRowList()) {
+            //第5个字段为空，第4个字段不为空
+            if ("".equals(rowData.getOneRowList().get(4)) && !("".equals(rowData.getOneRowList().get(3)))) {
                 try {
-                    Date date = sdf.parse(rowData.getOneRowList().get(4));
+                    Date date = sdf.parse(rowData.getOneRowList().get(3));
                     long datetime = date.getTime();
                     long difference = currentTime - datetime;
-                    long minute = difference/(1000*60);
-                    if (minute >= 14400){
+                    long minute = difference / (1000 * 60);
+                    //TODO 这里的时间需要从配置文件中获取
+                    if (minute >= 11430) {
                         handleData.add(rowData);
-                        System.out.println(minute + ";"+rowData.getOneRowList().get(4));
+                        System.out.println(minute + ";" + rowData.getOneRowList().get(3));
                     }
                 } catch (ParseException e) {
                     e.printStackTrace();
