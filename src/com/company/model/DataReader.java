@@ -126,7 +126,7 @@ public class DataReader {
                 }
                 //遍历表头和数据后
                 allBaseData = new BaseData();
-                allBaseData.setOneRowList(dataList);
+                allBaseData.setAllRowList(dataList);
             } else {
                 System.out.println("请确认是否正确放入文件");
             }

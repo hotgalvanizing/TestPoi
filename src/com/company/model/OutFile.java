@@ -2,7 +2,6 @@ package com.company.model;
 
 import com.company.bean.BaseExcel;
 import com.company.bean.BaseSheet;
-import com.company.bean.DataTitle;
 import org.apache.poi.hssf.usermodel.HSSFCell;
 import org.apache.poi.hssf.usermodel.HSSFRow;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
@@ -45,7 +44,7 @@ public class OutFile {
             out = new FileOutputStream(file);
 
             //循环创建需要的所有sheet
-            for (BaseSheet baseSheet:baseExcel.getSheetList()) {
+            for (BaseSheet baseSheet : baseExcel.getSheetList()) {
                 //创建excel工作簿对象
                 HSSFWorkbook wb = new HSSFWorkbook();
                 //创建excel页
@@ -57,8 +56,14 @@ public class OutFile {
                     HSSFCell cell = row1.createCell(i);
                     cell.setCellValue(baseSheet.getDataTitle().getTitleNameList().get(i));
                 }
-                //TODO 写入数据
-
+                //写入数据
+                for (int i = 0; i < baseSheet.getBaseData().getAllRowList().size(); i++) {
+                    HSSFRow row = sheet.createRow(i + 1);
+                    for (int j = 0; j < baseSheet.getBaseData().getAllRowList().get(i).getOneRowList().size(); j++) {
+                        HSSFCell cell = row.createCell(j);
+                        cell.setCellValue(baseSheet.getBaseData().getAllRowList().get(i).getOneRowList().get(j));
+                    }
+                }
                 wb.write(out);
             }
         } catch (FileNotFoundException e) {

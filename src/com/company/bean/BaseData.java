@@ -7,13 +7,13 @@ import java.util.List;
  */
 public class BaseData {
 
-    List<RowData> oneRowList;
+    List<RowData> allRowList;
 
-    public List<RowData> getOneRowList() {
-        return oneRowList;
+    public List<RowData> getAllRowList() {
+        return allRowList;
     }
 
-    public void setOneRowList(List<RowData> oneRowList) {
-        this.oneRowList = oneRowList;
+    public void setAllRowList(List<RowData> allRowList) {
+        this.allRowList = allRowList;
     }
 }
