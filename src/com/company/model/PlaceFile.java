@@ -1,22 +1,15 @@
 package com.company.model;
 
 import java.io.*;
-import java.util.Date;
 
 public class PlaceFile {
 
     File oldFile;
     File newFile;
 
-    public PlaceFile(String url1, String url2,String url3) {
-        long current = System.currentTimeMillis();
-        Date date = new Date(current);
-        int year = date.getYear();
-        int month = date.getMonth();
-        int day = date.getDate();
-        System.out.println(year+"-"+month+"-"+day);
-//        oldFile = new File(url1);
-//        newFile = new File(url2 + File.separator + );
+    public PlaceFile(String url1, String url2) {
+        oldFile = new File(url1);
+        newFile = new File(url2);
     }
 
     public void copyfile() {
