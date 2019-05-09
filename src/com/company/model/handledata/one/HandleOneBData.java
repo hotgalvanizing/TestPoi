@@ -1,6 +1,7 @@
 package com.company.model.handledata.one;
 
 import com.company.bean.RowData;
+import com.company.model.ConfigReader;
 import com.company.model.DataReader;
 import com.company.model.handledata.HandleData;
 
@@ -11,8 +12,15 @@ import java.util.Date;
 import java.util.List;
 
 public class HandleOneBData extends HandleData {
-    public HandleOneBData(DataReader dataOneReader) {
+
+    /**
+     * 保存配置信息
+     */
+    List<String> list = new ArrayList<>();
+
+    public HandleOneBData(DataReader dataOneReader, ConfigReader configReader) {
         super(dataOneReader);
+        list.addAll(configReader.getOneDataTime());
     }
 
     @Override
@@ -26,7 +34,7 @@ public class HandleOneBData extends HandleData {
      * 6、计算“接单时间”减“派单时间”与的差；
      * 7、加可设置筛选条件（分钟），得出结果表-回单催办表
      * 4、生成报表
-     *
+     * <p>
      * 接单时间--字段为空，第5个字段，index4
      * 派单时间--字段不为空，第4个字段，index3
      */
@@ -38,7 +46,7 @@ public class HandleOneBData extends HandleData {
         //筛选接单时间为空的数据,根据配置文件筛选,字符串转时间类型,时间类型计算时间差
         for (RowData rowData : dataReader.getDataList().getAllRowList()) {
             //第5个字段不为空，第4个字段不为空
-            if (!("".equals(rowData.getOneRowList().get(4))) &&  !("".equals(rowData.getOneRowList().get(3)))) {
+            if (!("".equals(rowData.getOneRowList().get(4))) && !("".equals(rowData.getOneRowList().get(3)))) {
                 try {
                     Date date1 = sdf.parse(rowData.getOneRowList().get(4));
                     Date date2 = sdf.parse(rowData.getOneRowList().get(3));
@@ -46,8 +54,11 @@ public class HandleOneBData extends HandleData {
                     long datetime2 = date2.getTime();
                     long difference = datetime1 - datetime2;
                     long minute = difference / (1000 * 60);
-                    //TODO 这里的时间需要从配置文件中获取
-                    if (minute >= 14400) {
+                    Integer time = null;
+                    if (list.get(0) != null) {
+                        time = Integer.valueOf(list.get(0));
+                    }
+                    if (minute >= time) {
                         handleData.add(rowData);
                         System.out.println(minute + ";" + rowData.getOneRowList().get(4));
                     }

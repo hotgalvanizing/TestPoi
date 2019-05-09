@@ -43,14 +43,15 @@ public class Main {
         System.out.println("读取配置文件");
         String configUrl = rootPath + File.separator + "配置文件" + File.separator + "配置文件.xls";
         ConfigReader configReader = new ConfigReader(configUrl);
+        configReader.readConfig();
 
         System.out.println("处理数据");
         //报表1A
-        HandleData handleOneAData = new HandleOneAData(dataOneReader);
+        HandleData handleOneAData = new HandleOneAData(dataOneReader, configReader);
         handleOneAData.handleData();
 
         //报表1B
-        HandleData handleOneBData = new HandleOneBData(dataOneReader);
+        HandleData handleOneBData = new HandleOneBData(dataOneReader, configReader);
         handleOneBData.handleData();
 
         System.out.println("处理结束");
@@ -62,12 +63,12 @@ public class Main {
         BaseSheet baseSheet1A = new BaseSheet();
         baseSheet1A.setBaseData(handleOneAData.getAllBaseData());
         baseSheet1A.setDataTitle(handleOneAData.getDataTitle());
-        baseSheet1A.setSheetName("Test1");
+        baseSheet1A.setSheetName("接单催办表");
 
         BaseSheet baseSheet1B = new BaseSheet();
         baseSheet1B.setBaseData(handleOneBData.getAllBaseData());
         baseSheet1B.setDataTitle(handleOneBData.getDataTitle());
-        baseSheet1B.setSheetName("Test2");
+        baseSheet1B.setSheetName("回单催办表");
 
         List<BaseSheet> baseSheets = new ArrayList<>();
         baseSheets.add(baseSheet1A);

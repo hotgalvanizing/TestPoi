@@ -1,6 +1,7 @@
 package com.company.model.handledata.one;
 
 import com.company.bean.RowData;
+import com.company.model.ConfigReader;
 import com.company.model.DataReader;
 import com.company.model.handledata.HandleData;
 
@@ -12,8 +13,14 @@ import java.util.List;
 
 public class HandleOneAData extends HandleData {
 
-    public HandleOneAData(DataReader dataOneReader) {
+    /**
+     * 保存配置信息
+     */
+    List<String> list = new ArrayList<>();
+
+    public HandleOneAData(DataReader dataOneReader, ConfigReader configReader) {
         super(dataOneReader);
+        list.addAll(configReader.getOneDataTime());
     }
 
     @Override
@@ -27,7 +34,7 @@ public class HandleOneAData extends HandleData {
      * 2、计算当前时间减”派单时间”的差；
      * 3、加可设置筛选条件（分钟），得出结果表-接单催办表；
      * 4、生成报表
-     *
+     * <p>
      * 接单时间--字段为空，第5个字段，index4
      * 派单时间--字段不为空，第4个字段，index3
      */
@@ -45,8 +52,11 @@ public class HandleOneAData extends HandleData {
                     long datetime = date.getTime();
                     long difference = currentTime - datetime;
                     long minute = difference / (1000 * 60);
-                    //TODO 这里的时间需要从配置文件中获取
-                    if (minute >= 11430) {
+                    Integer time = null;
+                    if (list.get(0) != null) {
+                        time = Integer.valueOf(list.get(0));
+                    }
+                    if (minute >= time) {
                         handleData.add(rowData);
                         System.out.println(minute + ";" + rowData.getOneRowList().get(3));
                     }
